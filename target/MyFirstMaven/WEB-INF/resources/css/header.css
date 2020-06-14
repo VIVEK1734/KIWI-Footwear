@@ -1,0 +1,12 @@
+@charset "ISO-8859-1";
+
+nav {
+	font-family: arial;
+	font-size: 12pt;
+	color: white;
+}
+
+a:hover {
+  color: #90EE90;
+  text-decoration: none;
+}  
