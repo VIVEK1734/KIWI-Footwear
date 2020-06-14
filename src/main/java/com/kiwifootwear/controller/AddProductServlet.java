@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.multipart.MultipartFile;
 import com.kiwifootwear.DAO.Impl.ProductDAOImpl;
 import com.kiwifootwear.model.Product;
 
@@ -18,20 +19,17 @@ public class AddProductServlet extends HttpServlet {
         super();
     }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
-		String img=request.getParameter("img");
+		Product p=new Product();
+		
+		MultipartFile img=p.getImage();
 		String id=request.getParameter("id");
 		String pname=request.getParameter("nm");
 		int price=Integer.parseInt(request.getParameter("price"));
 		int qty=Integer.parseInt(request.getParameter("qty"));
 		String desc=request.getParameter("desc");
 			
-		Product p=new Product();
 		p.setImage(img);
 		p.setId(id);
 		p.setName(pname);

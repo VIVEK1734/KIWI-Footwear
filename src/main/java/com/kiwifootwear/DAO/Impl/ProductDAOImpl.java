@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.kiwifootwear.DAO.ProductDAO;
 import com.kiwifootwear.model.Product;
+import org.springframework.web.multipart.MultipartFile;
 
 public class ProductDAOImpl implements ProductDAO{
 
@@ -21,14 +22,14 @@ public class ProductDAOImpl implements ProductDAO{
 	public List<Product> viewAllProduct() {
 		
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "VG", "Pritesh1@3");
+			Class.forName("org.h2.Driver");
+			con = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/test", "VG", "Pritesh1@3");
 			stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery("select * from product");
 			
 			while (rs.next()) {
 				prod = new Product();
-				prod.setImage(rs.getString("Image"));
+				prod.setImage(rs.getMultipartFile("Image"));
 				prod.setId(rs.getString("Id"));
 				prod.setName(rs.getString("Name"));
 				prod.setPrice(rs.getInt("Price"));
@@ -50,11 +51,11 @@ public class ProductDAOImpl implements ProductDAO{
 
 	public int insert(Product c) {
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "VG", "Pritesh1@3");
+			Class.forName("org.h2.Driver");
+			con = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/test", "VG", "Pritesh1@3");
 			ps = con.prepareStatement("insert into Product(Image,Id,Name,Price,Quantity,Description) values(?,?,?,?,?,?)");
 			
-			ps.setString(1,c.getImage());
+			ps.setMultipartFile(1,c.getImage());
 			ps.setString(2,c.getId());
 			ps.setString(3,c.getName());
 			ps.setInt(4,c.getPrice());
@@ -84,8 +85,8 @@ public class ProductDAOImpl implements ProductDAO{
 	
 	public int delete(int id) {
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "VG", "Pritesh1@3");
+			Class.forName("org.h2.Driver");
+			con = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/test", "VG", "Pritesh1@3");
 			ps = con.prepareStatement("delete from Product where Id=?");	
 			ps.setInt(1,id);
 	
@@ -113,10 +114,10 @@ public class ProductDAOImpl implements ProductDAO{
 	
 	public int update(Product p) {  
 		 try {
-			 Class.forName("oracle.jdbc.driver.OracleDriver");
-			 con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "VG", "Pritesh1@3");
+			 Class.forName("org.h2.Driver");
+			 con = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/test", "VG", "Pritesh1@3");
 			 ps = con.prepareStatement("update Product set Image=?,Name=?,Price=?,Quantity=?,Description=? where Id=?");	
-			 ps.setString(1, p.getImage());
+			 ps.setMultipartFile(1, p.getImage());
 			 ps.setString(2, p.getName());
 			 ps.setInt(3, p.getPrice());
 			 ps.setInt(4, p.getQuantity());

@@ -6,13 +6,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import org.springframework.web.multipart.MultipartFile;
+
 @Entity
 public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private String image;
+	private MultipartFile image;
 	private String id;
 	private String name;
 	private int Price;
@@ -21,14 +23,14 @@ public class Product implements Serializable {
 	
 	public Product() {}
 	
-	public String getImage() {
+	public MultipartFile getImage() {
 		return image;
 	}
 
-	public void setImage(String image) {
+	public void setImage(MultipartFile image) {
 		this.image = image;
 	}
-		
+
 	public String getId() {
 		return id;
 	}

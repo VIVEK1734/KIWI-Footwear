@@ -10,6 +10,7 @@ import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,13 +38,14 @@ public class CartServlet extends HttpServlet {
 
 		
 		try{
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "VG", "Pritesh1@3");
+			MultipartFile Image;
+			Class.forName("org.h2.Driver");
+			con = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/test", "VG", "Pritesh1@3");
 			stmt=con.createStatement();
 			rs=stmt.executeQuery("select * from product where Id= "+id);
 
 			while (rs.next()) {
-				prod.setImage(rs.getString("Image"));
+				prod.setImage(rs.getMultipartFile("Image"));
 				prod.setId(rs.getString("Id"));
 				prod.setName(rs.getString("Name"));
 				prod.setPrice(rs.getInt("Price"));
