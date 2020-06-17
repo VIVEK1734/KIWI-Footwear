@@ -1,149 +1,61 @@
 package com.kiwifootwear.DAO.Impl;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 import com.kiwifootwear.DAO.ProductDAO;
 import com.kiwifootwear.model.Product;
-import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-public class ProductDAOImpl implements ProductDAO{
+@Repository
+@Transactional
+public abstract class ProductDAOImpl implements ProductDAO {
 
-	private Connection con;
-	private Statement stmt;
-	private PreparedStatement ps;
-	private int res;
-	Product prod;
-	List<Product> p = new ArrayList<Product>();
-	public List<Product> viewAllProduct() {
+	
+	@Autowired
+	private SessionFactory sessionFactory;
+	
+	public Product getProductById (int id) {
 		
-		try {
-			Class.forName("org.h2.Driver");
-			con = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/test", "VG", "Pritesh1@3");
-			stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select * from product");
-			
-			while (rs.next()) {
-				prod = new Product();
-				prod.setImage(rs.getMultipartFile("Image"));
-				prod.setId(rs.getString("Id"));
-				prod.setName(rs.getString("Name"));
-				prod.setPrice(rs.getInt("Price"));
-				prod.setQuantity(rs.getInt("Quantity"));
-				prod.setDescription(rs.getString("Description"));
-				
-				p.add(prod);
-			}
-			
-			return p;
-		} 
+		Session session = sessionFactory.getCurrentSession();
+		Product product = (Product) session.get(Product.class, id);
+		session.flush();
 		
-		catch (Exception ex) {
-			ex.printStackTrace();
-			return null;
-		}
-
-	}
-
-	public int insert(Product c) {
-		try {
-			Class.forName("org.h2.Driver");
-			con = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/test", "VG", "Pritesh1@3");
-			ps = con.prepareStatement("insert into Product(Image,Id,Name,Price,Quantity,Description) values(?,?,?,?,?,?)");
-			
-			ps.setMultipartFile(1,c.getImage());
-			ps.setString(2,c.getId());
-			ps.setString(3,c.getName());
-			ps.setInt(4,c.getPrice());
-			ps.setInt(5,c.getQuantity());
-			ps.setString(6,c.getDescription());
-			
-			res=ps.executeUpdate();
-			
-			if(res>0) {
-				System.out.println("record inserted");
-				return 1;
-			}
-			
-			else {
-				System.out.println("record not inserted");
-				return 0;
-			}
-					
-		}
-		
-		catch(Exception ex) {
-			ex.printStackTrace();
-		}
-		
-		return 0;
+		return product;
 	}
 	
-	public int delete(int id) {
-		try {
-			Class.forName("org.h2.Driver");
-			con = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/test", "VG", "Pritesh1@3");
-			ps = con.prepareStatement("delete from Product where Id=?");	
-			ps.setInt(1,id);
-	
-			res=ps.executeUpdate();
+	public List<Product> getProductList() {
 		
-			if(res>0) {
-				System.out.println("record deleted");
-				return 1;
-			}
-			
-			else {
-				System.out.println("record not deleted");
-				return 0;
-			}
-			
-		}
+		Session session = sessionFactory.getCurrentSession();
+		Query query = session.createQuery("from Product");
+		List<Product> productList = query.list();
+		session.flush();
+		
+		return productList;
+	}
 
-		catch(Exception ex) {
-			ex.printStackTrace();
-		}
+	public void addProduct (Product product) {
 		
-		return 0;
-		
+		Session session = sessionFactory.getCurrentSession();
+		session.saveOrUpdate(product);
+		session.flush();		
 	}
 	
-	public int update(Product p) {  
-		 try {
-			 Class.forName("org.h2.Driver");
-			 con = DriverManager.getConnection("jdbc:h2:tcp://localhost/~/test", "VG", "Pritesh1@3");
-			 ps = con.prepareStatement("update Product set Image=?,Name=?,Price=?,Quantity=?,Description=? where Id=?");	
-			 ps.setMultipartFile(1, p.getImage());
-			 ps.setString(2, p.getName());
-			 ps.setInt(3, p.getPrice());
-			 ps.setInt(4, p.getQuantity());
-			 ps.setString(5, p.getDescription());
-			 ps.setString(6,p.getId());
-				
-			 res=ps.executeUpdate();
+	public void editProduct (Product product) {
 		
-			 if(res>0) {
-				 System.out.println("record Updated	");
-				 return 1;
-			 }
-			
-			 else {
-				 System.out.println("record not Updated");
-				 return 0;
-			 }
-			 
-			}
-
-			catch(Exception ex) {
-				ex.printStackTrace();
-			}
-			
-		 	return 0;
-
+		Session session = sessionFactory.getCurrentSession();
+		session.saveOrUpdate(product);
+		session.flush();
+	}
+	
+	public void deleteProduct (Product product) {  
+		
+		Session session = sessionFactory.getCurrentSession();
+		session.delete(product);
+		session.flush();
 	}  
 	
 }

@@ -120,4 +120,4 @@
 </body>
 </html>
 	
-<%@include file="footer.jsp"%>
+<%@ include file="/WEB-INF/views/template/footer.jsp" %>

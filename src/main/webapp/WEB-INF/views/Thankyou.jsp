@@ -1,5 +1,4 @@
-
-<%@ include file="header.jsp" %>
+<%@ include file="/WEB-INF/views/template/header.jsp" %>
 
 <div class="container-wrapper">
     <div class="container">
@@ -23,9 +22,4 @@ out.println(application.getAttribute("username"));
 %>
 
 
-<%@ include file="footer.jsp" %>
-
-
-
-
-
+<%@ include file="/WEB-INF/views/template/footer.jsp" %>

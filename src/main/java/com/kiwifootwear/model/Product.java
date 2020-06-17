@@ -1,74 +1,112 @@
 package com.kiwifootwear.model;
 
-import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
+import javax.persistence.*;
+import javax.validation.constraints.Min;
+import java.io.Serializable;
+import java.util.List;
 
 @Entity
 public class Product implements Serializable {
-	private static final long serialVersionUID = 1L;
+	
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private MultipartFile image;
-	private String id;
-	private String name;
-	private int Price;
-	private int Quantity;
-	private String Description;
+	@GeneratedValue
+	private int productId;
 	
-	public Product() {}
+	@NotEmpty(message = "The product name must not be empty")
+	private String productName;
 	
-	public MultipartFile getImage() {
-		return image;
-	}
-
-	public void setImage(MultipartFile image) {
-		this.image = image;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
+	private String productCategory;
+	private String productDescription;
 	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public int getPrice() {
-		return Price;
-	}
-
-	public void setPrice(int price) {
-		Price = price;
-	}
-
-	public int getQuantity() {
-		return Quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		Quantity = quantity;
-	}
-
-	public String getDescription() {
-		return Description;
-	}
-	
-	public void setDescription(String description) {
-		Description = description;
-	}
+	@Min(value = 0, message = "The product price must not be less than zero")
+	private double productPrice;
 		
+	@Min(value = 0, message = "The product unit must not be less than zero")
+	private int unitInStock;
+	private String productManufacturer;
+	
+	@Transient
+	private MultipartFile productImage ;
+	
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JsonIgnore
+	private List<CartItem> cartItemList;
+	
+
+	public int getProductId() {
+		return productId;
+	}
+
+	public void setProductId(int productId) {
+		this.productId = productId;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public String getProductCategory() {
+		return productCategory;
+	}
+
+	public void setProductCategory(String productCategory) {
+		this.productCategory = productCategory;
+	}
+
+	public String getProductDescription() {
+		return productDescription;
+	}
+
+	public void setProductDescription(String productDescription) {
+		this.productDescription = productDescription;
+	}
+
+	public double getProductPrice() {
+		return productPrice;
+	}
+
+	public void setProductPrice(double productPrice) {
+		this.productPrice = productPrice;
+	}
+
+	public int getUnitInStock() {
+		return unitInStock;
+	}
+
+	public void setUnitInStock(int unitInStock) {
+		this.unitInStock = unitInStock;
+	}
+
+	public String getProductManufacturer() {
+		return productManufacturer;
+	}
+
+	public void setProductManufacturer(String productManufacturer) {
+		this.productManufacturer = productManufacturer;
+	}
+
+	public MultipartFile getProductImage() {
+		return productImage;
+	}
+
+	public void setProductImage(MultipartFile productImage) {
+		this.productImage = productImage;
+	}
+
+	public List<CartItem> getCartItemList() {
+		return cartItemList;
+	}
+
+	public void setCartItemList(List<CartItem> cartItemList) {
+		this.cartItemList = cartItemList;
+	}
+				
 }

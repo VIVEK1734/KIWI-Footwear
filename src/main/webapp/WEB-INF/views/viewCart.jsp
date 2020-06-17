@@ -1,6 +1,6 @@
 <%@page import="com.kiwifootwear.model.Product"%>
 <%@page import="java.util.List"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
 <html>
 <head>
@@ -63,78 +63,51 @@
 		</nav>
 
 	<!-- Cart -->
-		<%! 
-			List<Product> cartItems;
-			Product p1;
-		%>
-			
-		<%
-			cartItems=(List<Product>)request.getAttribute("cartItems");
-			String totalPrice=request.getAttribute("totalPrice");
-		%>
-			
 		<div class="container-wrapper">
 		    <div class="container">
 		        <section>
 		            <div class="jumbotron">
 		                <div class="container">
-		                    <h1>Cart</h1>
+		                    <h1>CART</h1>
 		                    <p>All the selected products in your shopping cart</p>
 		                </div>
 		            </div>
 		        </section>
 			
-		        <section class="container">
-		        	<div>
+		        <section class="container" ng-app="cartApp">
+		        	<div ng-controller="cartCtrl" ng-init="initCartId('${cartId}')">
 		                <div>
-		                    <a class="btn btn-danger pull-left"><span class="glyphicon glyphicon-remove-sign"></span> Clear Cart</a>
-		          			<a href="BillingAddressForm.jsp" class="btn btn-success pull-right"><span class="glyphicon glyphicon-shopping-cart"></span> Check out</a>
+		                    <a class="btn btn-danger pull-left" ng-click = "clearCart()"><span class="glyphicon glyphicon-remove-sign"></span> CLEAR CART</a>
+		          			<a href="<spring:url value="/order/${cartId}" />" class="btn btn-success pull-right"><span class="glyphicon glyphicon-shopping-cart"></span> CHECK OUT</a>
 		                </div><br/><br/><br/>
 			
 		                <table class="table table-hover">
 		                    <tr>
-		                        <th>Product</th>
-		                        <th>Unit Price</th>
-		                        <th>Quantity</th>
-		                        <th>Price</th>
+		                        <th>PRODUCT</th>
+		                        <th>UNIT PRICE</th>
+		                        <th>QUANTITY</th>
+		                        <th>PRICE</th>
+		                        <th>ACTION</th>
 		                   	</tr>
 			                    
-			                <%
-								for(Product p:cartItems) {
-									p1=p;	
-			                %>
-			                    
-			                <tr>
-			                	<td><%
-									out.print(p.getName());
-								%></td>
-			                        
-			                    <td><%
-									out.print(p.getPrice());
-								%></td>
-			                        
-			                    <td>	
-			                    	<input type="number" name="qty" value="<% out.print(p.getQuantity()); %>" />
-			                   	</td>
-									
-								<td><%
-									out.print(p.getPrice());
-								%></td>
-			                       
-			            	<%
-								}
-							%>
+			                <tr ng-repeat = "item in cart.cartItems">
+			                	<td>{{item.product.productName}}</td>
+			                    <td>{{item.product.productPrice}}</td>
+			                    <td>{{item.quantity}}</td>
+								<td>{{item.totalPrice}}</td>
+			                	<td><a herf="" class label label-danger ng-click="removeFromCart(item.product.productId)"><span class="glyphicon glyphicon-remove"></span>REMOVE</a></td>
+			                </tr>
 			                
 			                <tr>
 			                	<th>Grand Total</th>
-			                    <th><%=totalPrice %></th>
+			                    <th>{{calGrandTotal()}}</th>
 			                </tr>
 			            </table>
 			
-			            <a href="Product" class="btn btn-default">Continue Shopping</a>
+			            <a href="<spring:url value="/productList" />" class="btn btn-default">CONTINUE SHOPPING</a>
 			       </div>
 			  	</section>
 			</div>
 		</div>
 
-<%@ include file="footer.jsp" %>
+<%@ include file="/WEB-INF/views/template/footer.jsp" %>

@@ -1,4 +1,4 @@
-<%@ include file="header.jsp" %>
+<%@ include file="/WEB-INF/views/template/header.jsp" %>
 
 <div class="container-wrapper">
     <div class="container">
@@ -19,7 +19,4 @@
 %>
 
 
-<%@ include file="footer.jsp" %>
-
-
-
+<%@ include file="/WEB-INF/views/template/footer.jsp" %>

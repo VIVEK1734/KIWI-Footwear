@@ -1,4 +1,4 @@
-<%@ include file="header.jsp" %>
+<%@ include file="/WEB-INF/views/template/header.jsp" %>
 
 <div class="container-wrapper">
     <div class="container">
@@ -14,7 +14,4 @@
             <p><a href="AdminMenu.jsp" class="btn btn-default">OK</a></p>
         </section>
 
-<%@ include file="footer.jsp" %>
-
-
-
+<%@ include file="/WEB-INF/views/template/footer.jsp" %>

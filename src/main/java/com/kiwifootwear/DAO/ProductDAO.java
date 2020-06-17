@@ -1,17 +1,18 @@
 package com.kiwifootwear.DAO;
 
 import java.util.List;
-
 import com.kiwifootwear.model.Product;
 
 public interface ProductDAO {
 	
-	public List<Product> viewAllProduct();
+	List<Product> getProductList();
 
-	public int insert(Product c);
+	Product getProductById (int id);
 	
-	public int delete(int id);
+	void addproduct(Product product);
 	
-	public int update(Product P);
+	void editproduct(Product product);
 
+	void deleteproduct(Product product);
+	
 }

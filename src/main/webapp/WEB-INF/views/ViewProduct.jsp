@@ -1,8 +1,5 @@
-<%@page import="java.util.ArrayList"%>
-<%@page import="com.kiwifootwear.model.Product"%>
-<%@page import="java.util.List"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=ISO-8859-1" language="java" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <html>
 <head>
     <meta charset="ISO-8859-1">
@@ -62,77 +59,43 @@
 		    <div class="container">
 		        <div class="page-header">
 		            		            
-		            <h1>All Products</h1>
+		            <h1>PRODUCT DETAIL</h1>
 		
-		            <p class="lead">Checkout all the shoes available now!</p>
+		            <p class="lead">Here is the detail information of the product:</p>
 		        </div>
 		
-		        <table class="table table-striped table-hover" style="padding: 0px 0px">
-		            <thead>
-		                <tr class="bg-success">
-		                    <th>IMAGE</th>
-		                    <th>PRODUCT ID</th>
-		                    <th>PRODUCT NAME</th>
-		                    <th>PRICE</th>
-		                    <th>QUANTITY</th>
-		                    <th>DESCRIPTION</th>
-		                </tr>
-		            </thead>
-		            
-		            <%! 
-		            	List<Product> list;
-						Product p1;
-					%>
-					
-					<%
-		  				list=(List<Product>)request.getAttribute("product");
-		  				
-						for(Product p:list) {
-							p1=p;
-		  					
-		  			%>
-		            		<tr>
-		                    	<td><%
-		                    		out.print("<img src='+p.getImage()+' height=183px width=273px />");
-								%></td>
-		                    
-		                    	<td><%
-		  							out.print(p.getId());
-		  						%></td>
-		                    
-		                    	<td><%
-		  							out.print(p.getName());
-		  						%></td>
-		                    
-		                    	<td>&#8377; <%
-		  							out.print(p.getPrice());
-		  						%></td>
-		  						
-		  						<td><%
-		  							out.print(p.getQuantity());
-		  						%></td>
-		  						
-		  						<td><%
-		  							out.print(p.getDescription());
-		  						%></td>
-		                    
-		                    	<td>
-		                    		<a href="viewProductDetail.jsp?q=<%=p1.getId() %>"><span class="glyphicon glyphicon-info-sign"></span></a>
-		                    	</td>
-		                	</tr>
-		         	<%
-		  				}
-					%>
-		        </table><br><br><br><br><br>
-		        
-		        <p style="text-align: center">
-		    		<a href="login.jsp" class="btn btn-info btn-lg">
-          				<span class="glyphicon glyphicon-log-out"></span> LOG OUT
-        			</a>
-      			</p> 
-		    </div>
-		</div><br><br><br><br><br>
+		        <div class="container" ng-app = "cartApp">
+		        	<div class="row">
+		        		<div class="col-md-5">
+		        			<img src="<c:url value="/resources/images/${product.productId}.png" />" alt="image" style="width: 100%" />
+		        		</div>
+		        		
+		        		<div class="col-md-5">
+		        			<h3>${product.productName}</h3>
+		        			<p>${product.productDescription}</p>
+		        			<p><strong>Manufacturer</strong>: ${product.productManufacturer}</p>
+		        			<p><strong>Condition</strong>: ${product.productCondition}</p>
+		        			<p>&#8377; ${product.productPrice}</p>
+		        			
+		        			<br>
+		        			
+		        			<c:set var="role" scope="page" value="${param.role}" />
+		        			<c:set var="url" scope="page" value="/product/productList" />
+		        			<c:if test="${role='admin'}">
+		        				<c:set var="url" scope="page" value="/admin/productInventory" />
+		        			</c:if>
+		        			
+		        			<p ng-controller="cartCtrl">
+		        				<a href="<c:url value = "${url}" />" class="btn btn-default">BACK</a>
+		        				<a href="#" class="btn btn-default" ng-click="addToCart('${product.productId}')"><span class="glyphicon glyphicon-shopping-cart"></span>ORDER NOW</a>
+		        				<a href="<spring:url value = "/cart" />" class="btn btn-default"><span class="glyphicon glyphicon-hand-right"></span>VIEW CART</a>
+							</p>
+		        		</div>
+					</div>
+				</div>
+			</div>
+		</div>
 </body>
 </html>
 
-<%@ include file="footer.jsp" %>
+<%@ include file="/WEB-INF/views/template/footer.jsp" %>

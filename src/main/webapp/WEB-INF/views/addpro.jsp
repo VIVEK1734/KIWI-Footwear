@@ -66,22 +66,23 @@
 		
 		        <form action="${pageContext.request.contextPath}/admin/product/addProduct" method="post" commandName="product" enctype="multipart/form-data">
 		            <div class="form-group">
-		                <label class="control-label" for="productImage">IMAGE</label>
-		                <form:input id="productImage" path="productImage" type="file" class="form:input-large" />
-		            </div>
-		            		            
-		            <div class="form-group">
-		                <label for="name">PRODUCT ID</label>
-		                <form:errors path="productID" cssStyle="color:#ff0000;" />
-		                <form:input path="productID" id="id" class="form-Control" />
+		                <label for="name">NAME</label>
+		                <form:errors path="productName" cssStyle="color:#ff0000;" />
+		                <form:input path="productName" id="name" class="form-Control" />
 		            </div>
 		            
 		            <div class="form-group">
-		                <label for="name">PRODUCT NAME</label>
-		                <form:errors path="productName" cssStyle="color:#ff0000;" />
-		                <form:input path="productName" id="nm" class="form-Control" />
+		            	<label for="category">CATEGORY</label>
+		                <label class="chechbox-inline"><form:radiobutton path="productCategory" id="category" value="shoes" />SHOES</label>
+		                <label class="chechbox-inline"><form:radiobutton path="productCategory" id="category" value="slippers" />SLIPPERS</label>
+		                <label class="chechbox-inline"><form:radiobutton path="productCategory" id="category" value="sandals" />SANDALS</label>
 		            </div>
 		
+		            <div class="form-group">
+		                <label for="description">DESCRIPTION</label>
+		                <form:textarea path="productDescription" id="description" class="form-Control" />
+		            </div>
+		            
 		            <div class="form-group">
 		                <label for="price">PRICE</label>
 		                <form:errors path="productPrice" cssStyle="color:#ff0000;" />
@@ -89,17 +90,24 @@
 		            </div>
 		
 		            <div class="form-group">
-		                <label for="quantity">QUANTITY</label>
+		                <label for="unitInStock">UNIT IN STOCK</label>
 		                <form:errors path="unitInStock" cssStyle="color:#ff0000;" />
-		                <form:input path="unitInStock" id="qty" class="form-Control" />
+		                <form:input path="unitInStock" id="price" class="form-Control" />
 		            </div>
-		
+		            
 		            <div class="form-group">
-		                <label for="description">DESCRIPTION</label>
-		                <form:textarea path="productDescription" id="desc" class="form-Control" />
+		                <label for="manufacturer">MANUFACTURER</label>		      
+		                <form:input path="productManufacturer" id="manufacturer" class="form-Control" />
 		            </div>
 		
-		            <br/><br/>
+		            
+		            
+		            <div class="form-group">
+		                <label class="control-label" for="productImage">UPLOAD PICTURE</label>
+		                <form:input id="productImage" path="productImage" type="file" class="form:input-large" />
+		            </div>
+		                 		
+		          	<br><br>
 		
 		        	<input type="submit" value="submit" class="btn btn-default">
 		        	<a href="<c:url value="/admin/productInventory" />" class="btn btn-default">Cancel</a>
@@ -110,4 +118,4 @@
 </body>
 </html>
 
-<%@ include file="/WEB-INF/views/footer.jsp" %>
+<%@ include file="/WEB-INF/views/template/footer.jsp" %>

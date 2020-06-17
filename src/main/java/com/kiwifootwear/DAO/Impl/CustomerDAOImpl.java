@@ -1,49 +1,82 @@
 package com.kiwifootwear.DAO.Impl;
 
 import com.kiwifootwear.DAO.CustomerDAO;
+import com.kiwifootwear.model.Authorities;
+import com.kiwifootwear.model.Cart;
 import com.kiwifootwear.model.Customer;
-import java.sql.*;
+import com.kiwifootwear.model.Users;
+import java.util.List;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+@Repository
+@Transactional
 public class CustomerDAOImpl implements CustomerDAO {
 
-	public Connection con;
-	public PreparedStatement ps;
-	public int res;
 
-	public int insert(Customer c) {
+	@Autowired
+	private SessionFactory sessionFactory;
 
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			con = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE", "VG", "Pritesh1@3");
-			ps = con.prepareStatement(
-					"insert into Customer(name,username,password,address,emailid,phoneno,type) values (?,?,?,?,?,?,?)");
-			ps.setString(1, c.getName());
-			ps.setString(2, c.getUsername());
-			ps.setString(3, c.getPassword());
-			ps.setString(4, c.getAddress());
-			ps.setString(5, c.getEmailid());
-			ps.setString(6, c.getPhoneno());
-			ps.setString(7, c.getType());
-			
-			res = ps.executeUpdate();
-
-			if (res > 0) {
-				System.out.println("Record Successfully Inserted");
-				return 1;
-			} 
-			
-			else {
-				System.out.println("Error inserting the record");
-				return 0;
-			}
-			
-		}
-
-		catch (Exception e) {
-			e.printStackTrace();
-			return 0;
-		}
-
+	public void addCustomer(Customer customer) {
+		
+		Session session = sessionFactory.getCurrentSession();
+		
+		customer.getBillingAddress().setCustomer(customer);
+		customer.getShippingAddress().setCustomer(customer);
+		
+		session.saveOrUpdate(customer);
+		session.saveOrUpdate(customer.getBillingAddress());
+		session.saveOrUpdate(customer.getShippingAddress());
+		
+		Users newUser = new Users();
+		newUser.setUsername(customer.getUsername());
+		newUser.setPassword(customer.getPassword());
+		newUser.setEnabled(true);
+		newUser.setCustomerId(customer.getCustomerId());
+		
+		Authorities newAuthorities = new Authorities();
+		newAuthorities.setUsername(customer.getUsername());
+		newAuthorities.setAuthority("ROLE_USER");
+		
+		session.saveOrUpdate(newUser);
+		session.saveOrUpdate(newAuthorities);
+		
+		Cart newCart = new Cart();
+		newCart.setCustomer(customer);
+		customer.setCart(newCart);
+		
+		session.saveOrUpdate(customer);
+		session.saveOrUpdate(newCart);
+		
+		session.flush();
 	}
+	
+	public Customer getCustomerById(int customerId) {
+		
+		Session session = sessionFactory.getCurrentSession();
+		return (Customer) session.get(Customer.class, customerId);
+	}
+	
+	public List<Customer> getAllCustomers() {
+		
+		Session session = sessionFactory.getCurrentSession();
+		Query query = session.createQuery("from Customer");
+		List<Customer> customerList = query.list();
 
+		return customerList;
+	}
+	
+	public Customer getCustomerByUsername(String username) {
+		
+		Session session = sessionFactory.getCurrentSession();
+		Query query = session.createQuery("from Customer where username = ?");
+		query.setString(0, username);
+		
+		return (Customer) query.uniqueResult();
+	}
+		
 }

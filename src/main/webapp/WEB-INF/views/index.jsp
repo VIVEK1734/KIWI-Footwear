@@ -1,6 +1,9 @@
-<%@ include file="header.jsp" %>
-
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ include file="/WEB-INF/views/template/header.jsp" %>
+    
+    
     <!-- Carousel -->
+    	===================================================================== -->
     	<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
 		  <ol class="carousel-indicators" style="color: black">
 		    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -360,4 +363,4 @@
 			</div>
 		</div><br><br><br><br><br>
 				
-<%@ include file="footer.jsp" %>
+<%@ include file="/WEB-INF/views/template/footer.jsp" %>

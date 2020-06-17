@@ -1,4 +1,4 @@
- <%@ include file="header.jsp" %>
+<%@ include file="/WEB-INF/views/template/header.jsp" %>
 
 <script>  
 function validateform(){  
@@ -152,4 +152,5 @@ if (hno==null || hno==""){
 <br />
 <br />
 <br />
-<%@ include file="footer.jsp" %>
+
+<%@ include file="/WEB-INF/views/template/footer.jsp" %>

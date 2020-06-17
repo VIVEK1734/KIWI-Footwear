@@ -1,38 +1,58 @@
 package com.kiwifootwear.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 public class Cart implements Serializable {
-	private static final long serialVersionUID = 1L;
 	
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	private int cartId;
-	private List<Product> l;
-	
-	public Cart() {}
 
+	@Id
+	@GeneratedValue
+	private int cartId;
+	
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<CartItem> cartItems;
+	
+	@OneToOne
+	@JoinColumn(name = "customerId")
+	@JsonIgnore
+	private Customer customer;
+	
+	private double grandTotal;
+	
 	public int getCartId() {
-		return cartId;	
+		return cartId;
 	}
 
 	public void setCartId(int cartId) {
 		this.cartId = cartId;
 	}
-	
-	public List<Product> getL() {
-		return l;
+
+	public List<CartItem> getCartItems() {
+		return cartItems;
 	}
 
-	public void setL(List<Product> l) {
-		this.l = l;
+	public void setCartItems(List<CartItem> cartItems) {
+		this.cartItems = cartItems;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
+	public double getGrandTotal() {
+		return grandTotal;
+	}
+
+	public void setGrandTotal(double grandTotal) {
+		this.grandTotal = grandTotal;
 	}
 
 }
